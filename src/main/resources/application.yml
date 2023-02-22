@@ -1,0 +1,28 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: blog
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/blog
+    username: qkransrb
+    password: password
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    open-in-view: false
+    defer-datasource-initialization: true
+    properties:
+      hibernate:
+        format_sql: true
+        # default_batch_fetch_size: 100
+
+app:
+  jwt:
+    secret: 0R0cqozB20lcSEPS+sisWGCyxN+kRLRPxUfz3tFS1EU=
+    expires: 10800000 # 3h
