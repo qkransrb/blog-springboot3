@@ -38,20 +38,25 @@ public class Post {
     @Column(nullable = false)
     private String content;
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "category_id", referencedColumnName = "id")
+    private Category category;
+
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<Comment> comments = new ArrayList<>();
 
     // constructor
-    public Post(String title, String description, String content) {
+    public Post(String title, String description, String content, Category category) {
         this.title = Objects.requireNonNull(title, "Post title is null");
         this.description = Objects.requireNonNull(description, "Post description is null");
         this.content = Objects.requireNonNull(content, "Post content is null");
+        this.category = Objects.requireNonNull(category, "Post category is null");
     }
 
     // generate static method
-    public static Post of(String title, String description, String content) {
-        return new Post(title, description, content);
+    public static Post of(String title, String description, String content, Category category) {
+        return new Post(title, description, content, category);
     }
 
     public Post update(PostDto postDto) {

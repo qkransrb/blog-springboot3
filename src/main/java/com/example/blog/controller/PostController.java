@@ -1,5 +1,6 @@
 package com.example.blog.controller;
 
+import com.example.blog.payload.CreatePostDto;
 import com.example.blog.payload.PageableDto;
 import com.example.blog.payload.PostDto;
 import com.example.blog.service.PostService;
@@ -20,8 +21,8 @@ public class PostController {
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<PostDto> create(@Valid @RequestBody PostDto postDto) {
-        return new ResponseEntity<>(postService.create(postDto), HttpStatus.CREATED);
+    public ResponseEntity<PostDto> create(@Valid @RequestBody CreatePostDto createPostDto) {
+        return new ResponseEntity<>(postService.create(createPostDto), HttpStatus.CREATED);
     }
 
     @GetMapping

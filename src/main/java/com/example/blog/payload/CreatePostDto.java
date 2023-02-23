@@ -1,19 +1,16 @@
 package com.example.blog.payload;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PostDto {
+public class CreatePostDto {
 
     private Long id;
 
@@ -28,7 +25,6 @@ public class PostDto {
     @NotBlank(message = "Post content is required")
     private String content;
 
-    private CategoryDto category;
-
-    private List<CommentDto> comments;
+    @NotNull(message = "Post category is required")
+    private Long categoryId;
 }

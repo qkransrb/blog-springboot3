@@ -1,9 +1,12 @@
 package com.example.blog.service.impl;
 
+import com.example.blog.entity.Category;
 import com.example.blog.entity.Post;
 import com.example.blog.exception.ResourceNotFoundException;
+import com.example.blog.payload.CreatePostDto;
 import com.example.blog.payload.PageableDto;
 import com.example.blog.payload.PostDto;
+import com.example.blog.repository.CategoryRepository;
 import com.example.blog.repository.PostRepository;
 import com.example.blog.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -22,19 +25,25 @@ import java.util.stream.Collectors;
 public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
+    private final CategoryRepository categoryRepository;
     private final ModelMapper modelMapper;
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public PostDto create(PostDto postDto) {
-        Optional<Post> optional = postRepository.findByTitle(postDto.getTitle());
+    public PostDto create(CreatePostDto createPostDto) {
+        Optional<Post> optional = postRepository.findByTitle(createPostDto.getTitle());
 
         if (optional.isPresent()) {
             throw new IllegalArgumentException("Post title is already in use");
         }
 
-        Post post = Post.of(postDto.getTitle(), postDto.getDescription(), postDto.getContent());
+        Category category = categoryRepository.findById(createPostDto.getCategoryId())
+                .orElseThrow(() -> new ResourceNotFoundException("Category", "id", String.valueOf(createPostDto.getCategoryId())));
+
+        Post post = Post.of(createPostDto.getTitle(), createPostDto.getDescription(), createPostDto.getContent(), category);
         Post entity = postRepository.save(post);
+
+        System.out.println("entity = " + entity);
 
         return modelMapper.map(entity, PostDto.class);
     }
